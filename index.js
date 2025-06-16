@@ -17,10 +17,15 @@ const server = http.createServer((req, res) => {
   req.on("end", () => {
     try {
       const json = JSON.parse(body);
-      console.log("LINE Webhook:", JSON.stringify(json, null, 2));
+      console.log("Received from LINE:", JSON.stringify(json, null, 2));
+
+      // 受け取ったJSONをそのまま返す
+      res.setHeader("Content-Type", "application/json");
       res.statusCode = 200;
-      res.end("OK");
-    } catch {
+      res.end(JSON.stringify(json));
+
+    } catch (err) {
+      console.error("Invalid JSON:", err);
       res.statusCode = 400;
       res.end("Invalid JSON");
     }
